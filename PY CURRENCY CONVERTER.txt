@@ -7,6 +7,7 @@ import requests
 # API key that you can get from exchangerate-api.com
 # After you finish account activation you will get API via email that you can use
 # Copy the API and replace it in API_KEY under ' ' 
+
 API_KEY = 'API'
 BASE_URL = 'https://v6.exchangerate-api.com/v6'
 

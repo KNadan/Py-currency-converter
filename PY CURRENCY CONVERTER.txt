@@ -1,0 +1,56 @@
+#For this program you need requests
+#You can instal them with pip
+#Go to cmd and install it 
+
+import requests
+
+# API key that you can get from exchangerate-api.com
+# After you finish account activation you will get API via email that you can use
+# Copy the API and replace it in API_KEY under ' ' 
+API_KEY = 'API'
+BASE_URL = 'https://v6.exchangerate-api.com/v6'
+
+# Function to fetch exchange rates
+def fetch_exchange_rate(base_currency):
+    url = f"{BASE_URL}/{API_KEY}/latest/{base_currency}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
+
+# Function to perform currency conversion
+def convert_currency(amount, from_currency, to_currency, rates):
+    if from_currency == to_currency:
+        return amount
+    rate = rates['conversion_rates'][to_currency]
+    return amount * rate
+
+# Main function
+def main():
+    currencies = ['EUR', 'RUB', 'USD', 'RSD']
+    print("Available currencies:", ", ".join(currencies))
+    
+    from_currency = input("Select your currency to convert from (e.g., EUR): ").upper()
+    to_currency = input("Select your currency to convert to (e.g., USD): ").upper()
+    
+    if from_currency not in currencies or to_currency not in currencies:
+        print("Invalid currency selection. Please try again.")
+        return
+    
+    try:
+        amount = float(input(f"Enter amount in {from_currency}: "))
+    except ValueError:
+        print("Invalid amount. Please enter a numeric value.")
+        return
+    
+    print(f"Fetching exchange rates for {from_currency}...")
+    rates = fetch_exchange_rate(from_currency)
+    if rates:
+        converted_amount = convert_currency(amount, from_currency, to_currency, rates)
+        print(f"{amount} {from_currency} is equal to {converted_amount:.2f} {to_currency}")
+    else:
+        print("Failed to fetch exchange rates. Please try again later.")
+
+if __name__ == "__main__":
+    main()
